@@ -18,9 +18,9 @@ export const deleteUser =  async(req:express.Request,res:express.Response)=>{
 
         const deletedUser = await deleteUserById(id);
 
-        return res.json(deletedUser);
+        return res.status(201).json({success:true,message:"user deleted successfully"});
     }catch(error){
-        return res.sendStatus(400);
+        return res.status(400).json({success:false,message:error});
     }
 }
 
@@ -40,10 +40,10 @@ export const updateUser = async(req:express.Request,res:express.Response)=>{
         user.username = username;
         await user.save();
 
-        return res.status(200).json(user).end();
+        return res.status(200).json({success:true,message:"user updated successfully"}).end();
         
     }catch(error){
        console.log(error);
-       return res.sendStatus(400); 
+       return res.status(400).json({success:false,message:error});
     }
 }
