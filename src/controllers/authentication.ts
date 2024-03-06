@@ -1,6 +1,8 @@
 import express from "express";
 import { createUser, getUserByEmail } from "../db/users";
 import { authentication, random } from "../helpers";
+import { any } from "joi";
+import messages from "routers/messages";
 
 
 export const login = async (req:express.Request,res:express.Response)=>{
@@ -14,7 +16,7 @@ export const login = async (req:express.Request,res:express.Response)=>{
         const user = await getUserByEmail(email).select('+authentication.salt +authentication.password');
 
         if(!user){
-            return res.status(400).json({success:false,message:"bad request"});
+            return res.status(404).json({success:false,message:"unregistered email"});
         }
 
         const expectedHash = authentication(user.authentication!.salt!,password);
@@ -43,7 +45,7 @@ export const login = async (req:express.Request,res:express.Response)=>{
 export const register = async(req:express.Request,res:express.Response)=>{
     try{
 
-        const{email,password,username} = req.body;
+        const{email,password,username,isAdmin} = req.body;
 
         if(!email||!password||!username){
             return res.status(400).json({success:false,message:"Missing Credentials"});
@@ -60,11 +62,23 @@ export const register = async(req:express.Request,res:express.Response)=>{
                 salt,
                 password:authentication(salt,password),
             },
+            isAdmin
         });
 
         return res.status(201).json({success:true,message:`${user.username} created`}).end(); 
     }catch(error){
        console.log(error);
        return res.status(400).json({success:false,message:"bad request"}); 
+    }
+}
+
+export const logout = async(req:express.Request,res:express.Response)=>{
+    try{
+        const sessionToken = req.cookies["KYZIE-AUTH"];
+        if(!sessionToken) return res.status(404).json({success:false,message:"Not logged in"});
+        res.clearCookie("KYZIE-AUTH");
+        res.status(200).json({success:true,message:"logged out successfully"});
+    }catch(error){
+        return res.status(400).json({success:false,error:error});
     }
 }

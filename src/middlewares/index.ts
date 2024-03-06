@@ -48,3 +48,15 @@ export const isAuthenticated = async (req:express.Request,res:express.Response,n
         return res.status(400).json({success:false,message:error});
     }
 }
+
+export const isAdmin = async (req:express.Request,res:express.Response,next:express.NextFunction)=>{
+    try{
+        const status = String(get(req,'identity.isAdmin'));
+        if(status==="false"||!status){
+            return res.status(403).json({success:false,message:"You are not an admin"});
+        }
+        next();
+    }catch(error){
+        return res.status(400).json({success:false,message:error});
+    }
+}

@@ -99,6 +99,26 @@
                 ]
             }
         },
+        "/auth/logout":{
+            "post": {
+                "tags": ["Authentication"],
+                "summary": "Logout ",
+                "description": "Logout",
+                "produces":["application/json"],
+                "consumes":["application/json"],
+                "responses": {
+                    "200":{
+                        "description": "Ok"
+                    },
+                    "400":{
+                        "description": "bad request"
+                    },
+                    "403":{
+                        "description": "not logged in"
+                    }
+                }
+            }
+        },
         "/users":{
             "get": {
                 "tags": ["Users"],
@@ -183,6 +203,45 @@
                     },
                     "500":{
                         "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/users/{id}/status":{
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "description": "Id of user",
+                    "required": true,
+                    "type": "string"
+
+                }
+            ],
+            "patch": {
+                "summary": "Change user status",
+                "tags": ["Users"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "user status",
+                        "schema": {
+                            "$ref": "#/definitions/userStatusPatch"
+                        }
+                    }
+                ],
+                "consumes":["application/json"],
+                "produces":["application/json"],
+                "responses": {
+                    "200":{
+                        "description": "Ok"
+                    },
+                    "400":{
+                        "description": "bad request"
+                    },
+                    "404":{
+                        "description": "USer not found"
                     }
                 }
             }
@@ -315,19 +374,22 @@
                         "in": "formData",
                         "name": "title",
                         "type": "string",
-                        "description": "Blog title"
+                        "description": "Blog title",
+                        "required": false
                     },
                     {
                         "in": "formData",
                         "name": "body",
                         "type": "string",
-                        "description": "Blog body"
+                        "description": "Blog body",
+                        "required": false
                     },
                     {
                         "in": "formData",
                         "name": "image",
                         "description": "Blog Image",
-                        "type": "file"
+                        "type": "file",
+                        "required": false
                     }
 
                 ],
@@ -335,10 +397,7 @@
                 "produces":["application/json"],
                 "responses": {
                     "200":{
-                        "description": "OK",
-                        "schema":{
-                            "$ref": "#/definitions/id"
-                        }
+                        "description": "OK"
                     },
                     "400":{
                         "description": "failed. bad request"
@@ -694,6 +753,14 @@
             "properties": {
                 "username":{
                     "type":"string"
+                }
+            }
+        },
+        "userStatusPatch":{
+            "type":"object",
+            "properties": {
+                "isAdmin":{
+                    "type":"boolean"
                 }
             }
         },

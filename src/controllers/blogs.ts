@@ -65,7 +65,7 @@ export const deleteBlog = async(req:express.Request,res:express.Response)=>{
 
         return res.status(201).json({success:true,message:"Blog deleted"});
     }catch(error){
-        return res.status(400).json({success:false});
+        return res.status(400).json({success:false,error:error});
     }
 }
 
