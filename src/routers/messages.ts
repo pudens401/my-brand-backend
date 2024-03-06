@@ -10,5 +10,3 @@ export default(router:express.Router)=>{
     router.delete('/messages/:id',isAuthenticated,deleteOneMessage);
     router.post('/messages/send',messageValidator,sendMessage);
 }
-
-//
