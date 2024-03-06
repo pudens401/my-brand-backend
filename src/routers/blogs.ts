@@ -8,7 +8,7 @@ import { blogValidator } from '../middlewares/joi_validation';
 
 
 export default(router:express.Router)=>{
-    router.get('/blogs',isAuthenticated,getAllBlogs); 
+    router.get('/blogs',getAllBlogs); 
     router.delete('/blogs/:id',isAuthenticated,deleteBlog);
     router.patch('/blogs/:id',isAuthenticated,upload.single('image'),updateBlog);  
     router.post('/blogs/new',isAuthenticated,upload.single('image'),blogValidator,newBlog);

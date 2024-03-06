@@ -12,7 +12,7 @@ export const isOwner = async(req:express.Request,res:express.Response,next:expre
             return res.status(403).json({success:false,message:"Forbidden"});
         }
         if(currentUserId!==id){
-            return res.status(403).json({success:false,message:"Can't delete other user"});
+            return res.status(403).json({success:false,message:"Can't modify or delete other user"});
         }
 
         next();

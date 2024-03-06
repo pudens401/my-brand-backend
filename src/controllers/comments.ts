@@ -20,7 +20,8 @@ export const getBlogComments = async (req:express.Request,res:express.Response)=
 
 export const createBlogComment = async (req:express.Request,res:express.Response)=>{
     try{
-      const {commenter,commentBody} = req.body;
+      const {commentBody} = req.body;
+      const commenter = String(get(req,'identity.username'))
       const commenterId = String(get(req,'identity._id'));
       const blogId = req.params.id;
       const blog = await getBlogById(blogId);
