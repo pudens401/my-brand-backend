@@ -73,32 +73,32 @@ export const updateBlog = async(req:express.Request,res:express.Response)=>{
     try{
         const {title,body} = req.body;
         const{id} = req.params;
-        const imageFile = req.file?.path;
+        const imageFile = req.file?req.file.path:false;
 
-        const cloudinaryRes = await cloudinary.uploader.upload(imageFile!,{folder:'blog_images'});
-        // const imgUrl = cloudinaryRes.secure_url;
-
-        // if(!title||!body||!image){
-        //    return res.sendStatus(400);
-        // }
+       
         const blog = await getBlogById(id);
         if(!blog){
             return res.status(400).json({success:false,message:"Blog non-existent"});
         }
         
+         if(imageFile){
+
+        const cloudinaryRes = await cloudinary.uploader.upload(imageFile,{folder:'blog_images'});
         const existingImage = {
             url:blog.image.url,
             public_id:blog.image.public_id,
         }
 
         await cloudinary.uploader.destroy(existingImage.public_id);
+        
+            blog.image ={
+            url:cloudinaryRes.secure_url,
+            public_id:cloudinaryRes.public_id, 
+            }
+        }
 
         blog.body = body;
         blog.title = title;
-        blog.image ={
-            url:cloudinaryRes.secure_url,
-            public_id:cloudinaryRes.public_id, 
-        },
         await blog.save();
 
         return res.status(201).json({success:true,message:"Blog updated"}).end();

@@ -18,7 +18,7 @@ export const getOneMessage = async (req:express.Request,res:express.Response)=>{
         const {id} = req.params;
         const retrievedMessage = await getMessagesById(id);
         if(!retrievedMessage){
-            return res.status(400).json({success:false,message:"message non-existent"});
+            return res.status(404).json({success:false,message:"message non-existent"});
         }
         retrievedMessage.read = true;
         retrievedMessage.save();
@@ -34,8 +34,8 @@ export const deleteOneMessage = async (req:express.Request,res:express.Response)
     try{
         const {id} = req.params;
         const deletedMessage = await deleteMessage(id);
-        if(!deleteMessage){
-            return res.status(400).json({success:false,message:"message non-existent"});
+        if(!deletedMessage){
+            return res.status(404).json({success:false,message:"message non-existent"});
         }
         return res.status(200).json({success:true,message:"Message deleted successfully"});
     }catch(error){

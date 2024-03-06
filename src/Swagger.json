@@ -1,0 +1,534 @@
+{
+    "swagger":"2.0",
+    "info":{
+        "version":"1.0.0",
+        "title":"My-Brand-Pudens",
+        "description":"APIs for my brand portfolio website",
+        "license":{
+            "name":"MIT",
+            "url":"https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:5000",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "MY BRAND",
+            "description": "APIs"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes":[ 
+        "application/json" 
+    ],
+    "produces":[
+        "application/json"
+    ],
+    "paths": {
+        "/messages":{
+            "get":{
+                "tags": [
+                    "Messages"
+                ],
+                "summary": "Get all messages",
+                "responses": {
+                    "200":{
+                        "description": "OK",
+                        "schema":{
+                            "$ref": "messages"
+                        }
+                    },
+                    "400":{
+                        "description": "failed.bad request"
+                       },
+                    "403":{
+                        "description": "not logged in"
+                    }
+                }
+            }
+        },
+        "/messages/send":{
+            "post": {
+                "tags": [
+                    "Messages"
+                ],
+                "summary": "Send a new message",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The sent message",
+                        "schema": {
+                            "$ref": "#/definitions/message"
+                        }
+                    }
+                ],
+                "produces":[
+                    "application/json"
+                ],
+                "responses": {
+                   "200":{
+                    "description": "Ok",
+                    "schema":{
+                        "$ref": "#/definitions/id"
+                    }
+                   },
+                   "400":{
+                    "description": "failed.bad request"
+                   }
+                }
+            }
+        },
+        "/messages/{id}":{
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of the message",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Messages"
+                ],
+                "summary": "Get message by ID",
+                "responses": {
+                    "200":{
+                        "description": "OK",
+                        "schema":{
+                            "$ref": "#/definitions/message"
+                        }
+                    },
+                    "404":{
+                        "description": "Failed. Innexistent message"
+                    },
+                    "400":{
+                        "description": "Failed. Bad request"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "delete a message by id",
+                "tags": [
+                    "Messages"
+                ],
+                "responses": {
+                    "200":{
+                        "description": "OK",
+                        "schema":{
+                            "$ref": "#/definitions/id"
+                        }
+                    },
+                    "404":{
+                        "description": "failed. Innexistent message"
+                    },
+                    "400":{
+                        "description": "failed. Bad request"
+                    }
+                }
+            }
+        },
+        "/blogs":{
+            "get": {
+                "tags": [
+                    "Blogs"
+                ],
+                "summary": "Get all blogs",
+                "responses": {
+                    "200":{
+                        "description": "OK",
+                        "schema":{
+                            "$ref": "blogs"
+                        }
+                    },
+                    "400":{
+                        "description": "Failed. Bad request"
+                    },
+                    "403":{
+                        "description": "not logged in"
+                    }
+                }
+            }
+        },
+        "/blogs/new":{
+            "post": {
+                "tags": ["Blogs"],
+                "summary": "Post a new blog",
+                "consumes":[
+                    "multipart/form-data"
+                ],
+                "produces":["application/json"],
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "title",
+                        "type": "string",
+                        "required": true,
+                        "description": "Blog title"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "body",
+                        "type": "string",
+                        "required": true,
+                        "description": "Blog body"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "image",
+                        "description": "Blog Image",
+                        "type": "file",
+                        "required": true
+                    }
+
+                ],
+                "responses": {
+                    "200":{
+                        "description": "OK",
+                        "schema":{
+                            "type":"object",
+                            "properties": {
+                                "message":{
+                                    "type":"string"
+                                }  
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "failed. bad request"
+                    }
+                }
+            }
+        },
+        "/blogs/{id}":{
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of the blog",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Blogs"
+                ],
+                "summary": "Get blog by ID",
+                "responses": {
+                    "200":{
+                        "description": "OK",
+                        "schema":{
+                            "$ref": "#/definitions/blog"
+                        }
+                    },
+                    "404":{
+                        "description": "failed. Innexistent blog"
+                    },
+                    "400":{
+                        "description": "failed. bad request"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a blog by id",
+                "tags": ["Blogs"],
+                "responses": {
+                    "200":{
+                        "description": "OK",
+                        "schema":{
+                            "$ref": "#/definitions/id"
+                        }
+                    },
+                    "400":{
+                        "description": "Bad request"
+                    },
+                    "404":{
+                        "description": "Innexistent blog"
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Update blog by id",
+                "tags": ["Blogs"],
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "title",
+                        "type": "string",
+                        "description": "Blog title"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "body",
+                        "type": "string",
+                        "description": "Blog body"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "image",
+                        "description": "Blog Image",
+                        "type": "file"
+                    }
+
+                ],
+                "consumes":["multipart/form-data"],
+                "produces":["application/json"],
+                "responses": {
+                    "200":{
+                        "description": "OK",
+                        "schema":{
+                            "$ref": "#/definitions/id"
+                        }
+                    },
+                    "400":{
+                        "description": "failed. bad request"
+                    }
+                }
+            }
+        },
+        "/blogs/{id}/like":{
+            "post": {
+                "tags": ["Blogs"],
+                "summary": "Like a blog",
+                "security": [{
+                    "KYZIE-AUTH":[]
+                }],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "blog id",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "produces":["application/json"],
+                "responses": {
+                    "200":{
+                        "description": "OK"
+
+                    },
+                    "400":{
+                        "description": "Bad request"
+                    },
+                    "404":{
+                        "description": "Innexistent blog"
+                    }
+                }
+            }
+        },
+        "/auth/signup":{
+            "post": {
+                "tags": ["Authentication"],
+                "summary": "Add a new user",
+                "consumes":["application/json"],
+                "produces":["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "new user info",
+                        "schema": {
+                            "$ref": "#/definitions/user"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200":{
+                        "description": "ok"
+                    },
+                    "201":{
+                        "description": "user created"
+                    },
+                    "400":{
+                        "description": "bad request"
+                    }
+                }
+            }
+        },
+        "/auth/login":{
+            "post": {
+                "tags": ["Authentication"],
+                "summary": "Login",
+                "consumes":["application/json"],
+                "produces":["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "login user",
+                        "schema": {
+                            "$ref": "#/definitions/loginUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200":{
+                        "description": "ok",
+                        "headers": {
+                            "Set-Cookie":{
+                                "description": "Genereted a cookie",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "bad request"
+                    },
+                    "401":{
+                        "description": "no existing user"
+                    },
+                    "403":{
+                        "description": "wrong credentials"
+                    }
+                },
+                "security": [
+                    {
+                        "KYZIE_AUTH":[]
+                    }
+                ]
+            }
+        }
+
+
+    },
+    "securityDefinitions": {
+        "KYZIE_AUTH":{
+            "type": "apiKey",
+            "in": "header",
+            "name": "Login Cookie"
+        }
+    },
+    "definitions": {
+        "message":{
+            "type":"object",
+            "properties": {
+                "senderName":{
+                    "type":"string"
+                },
+                "senderEmail":{
+                    "type":"string"
+                },
+                "messageBody":{
+                    "type":"string"
+                },
+                "read":{
+                    "type":"boolean"
+                }
+            }
+        },
+        "Messages":{
+            "type":"array",
+            "properties": {
+                "messages":{
+                    "type":"object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/message"
+                    }
+                }
+                
+            }
+        },
+        "id":{
+            "type":"string"
+        },
+        "blog":{
+            "type":"object",
+            "properties": {
+                "title":{
+                    "type":"string",
+                    "required": ["true"]
+                },
+                "body":{
+                    "type":"string",
+                    "required": ["true"]
+                },
+                "image":{
+                    "type":"object",
+                    "required": ["true"]
+                },
+                "likes":{
+                    "type":"array",
+                    "default":[]
+                }
+            }
+        },
+        "blogPatch":{
+            "type":"object",
+            "properties": {
+                "title":{
+                    "type":"string"
+                },
+                "body":{
+                    "type":"string"
+                },
+                "image":{
+                    "type":"object"
+                }
+            }
+
+        },
+        "blogs":{
+            "type":"array",
+            "properties": {
+                "blogs":{
+                    "type":"object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/blog"
+                    }
+                }
+            }
+        },
+        "user":{
+            "type":"object",
+            "properties": {
+                "username":{
+                    "type":"string",
+                    "required": ["true"]
+                },
+                "email":{
+                    "type":"string",
+                    "required": ["true"]
+                },
+                "password":{
+                    "type":"string",
+                    "required": ["true"]
+                },
+                "confirmPassword":{
+                    "type":"string"
+                }
+            }
+        },
+        "loginUser":{
+            "type":"object",
+            "properties": {
+                "email":{
+                    "type":"string",
+                    "required": ["true"]
+                },
+                "password":{
+                    "type":"string",
+                    "required": ["true"]
+                }
+            }
+        },
+        "users":{
+            "type":"array",
+            "properties": {
+                "blogs":{
+                    "type":"object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/user"
+                    }
+                }
+            }
+        }
+        
+    }
+      
+}

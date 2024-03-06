@@ -1,15 +1,16 @@
 import express, { Router } from 'express'
-import http from 'http'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import compression from 'compression'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import routers from './routers'
-import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from "swagger-ui-express"
-// import * as swaggerDocument from "./Swagger.json"
+import * as swaggerDocument from './Swagger.json'
+
 import {cloudinary} from './config/cloudinary'
+
+
 
 const app = express();
 app.use(cors({
@@ -21,6 +22,8 @@ app.use(cors({
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
+app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerDocument));
+
 
 
 
