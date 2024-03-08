@@ -32,8 +32,6 @@ app.listen(PORT,()=>{
     console.log(`Server started at localhost:${PORT}`);
 });
 
-// const MONGO_URL = 
-
 mongoose.Promise = Promise;
 const connectDB = async ()=>{
     try{
@@ -45,7 +43,6 @@ const connectDB = async ()=>{
 }
 // mongoose.connect('mongodb://localhost:27017/mybrand');
 connectDB();
-
 
 app.use('/',routers());
  
