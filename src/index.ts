@@ -7,6 +7,7 @@ import mongoose from 'mongoose'
 import routers from './routers'
 import swaggerUi from "swagger-ui-express"
 import * as swaggerDocument from './Swagger.json'
+require("dotenv").config();
 
 import {cloudinary} from './config/cloudinary'
 
@@ -24,18 +25,26 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerDocument));
 
+const PORT = process.env.DEV_PORT?Number(process.env.DEV_PORT):5000;
 
 
-
-app.listen(5000,()=>{
-    console.log('Server started at localhost:5000....');
+app.listen(PORT,()=>{
+    console.log(`Server started at localhost:${PORT}`);
 });
 
 // const MONGO_URL = 
 
 mongoose.Promise = Promise;
-mongoose.connect('mongodb://localhost:27017/mybrand');
-mongoose.connection.on('error',(error:Error)=>console.log(error));
+const connectDB = async ()=>{
+    try{
+        await mongoose.connect(process.env.MONGODB_CONNECT_URI!);
+        console.log("Connected to Mongo DB successfully");
+    }catch(error:any){
+        console.log("Connection failed"+error.message);
+    }
+}
+// mongoose.connect('mongodb://localhost:27017/mybrand');
+connectDB();
 
 
 app.use('/',routers());
