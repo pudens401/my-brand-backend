@@ -29,7 +29,7 @@ const PORT = process.env.DEV_PORT?Number(process.env.DEV_PORT):5000;
 
 
 app.listen(PORT,()=>{
-    console.log(`Server started at localhost:${PORT}`);
+    console.log(`Server started at ${PORT}`);
 });
 
 mongoose.Promise = Promise;
