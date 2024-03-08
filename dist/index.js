@@ -55,9 +55,8 @@ app.use(body_parser_1.default.json());
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 const PORT = process.env.DEV_PORT ? Number(process.env.DEV_PORT) : 5000;
 app.listen(PORT, () => {
-    console.log(`Server started at localhost:${PORT}`);
+    console.log(`Server started at ${PORT}`);
 });
-// const MONGO_URL = 
 mongoose_1.default.Promise = Promise;
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {

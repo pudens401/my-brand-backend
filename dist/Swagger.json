@@ -5,10 +5,10 @@
         "title": "My-Brand-Pudens",
         "description": "APIs for my brand portfolio website"
     },
-    "host": "localhost:5000",
+    "host": "my-brand-backend-qcoe.onrender.com",
     "basePath": "/",
     "schemes": [
-        "http"
+        "http", "https"
     ],
     "consumes": [
         "application/json"
