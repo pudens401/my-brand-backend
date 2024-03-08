@@ -6,7 +6,6 @@
         "description":"APIs for my brand portfolio website"
         
     },
-    "host": "my-brand-backend-qcoe.onrender.com",
 
     "basePath": "/",
     "schemes": [
