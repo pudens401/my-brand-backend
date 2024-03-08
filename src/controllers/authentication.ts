@@ -30,7 +30,7 @@ export const login = async (req:express.Request,res:express.Response)=>{
 
         await user.save();
 
-        res.cookie('KYZIE-AUTH', user.authentication?.sessionToken, {domain:'localhost',path:'/'});
+        res.cookie('KYZIE-AUTH', user.authentication?.sessionToken, {path:'/'});
 
         return res.status(200).json({success:true,message:`${user.username} logged in`}).end();
     }catch(error){
