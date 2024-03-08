@@ -30,7 +30,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const salt = (0, helpers_1.random)();
         user.authentication.sessionToken = (0, helpers_1.authentication)(salt, user._id.toString());
         yield user.save();
-        res.cookie('KYZIE-AUTH', (_a = user.authentication) === null || _a === void 0 ? void 0 : _a.sessionToken, { domain: 'localhost', path: '/' });
+        res.cookie('KYZIE-AUTH', (_a = user.authentication) === null || _a === void 0 ? void 0 : _a.sessionToken, { path: '/' });
         return res.status(200).json({ success: true, message: `${user.username} logged in` }).end();
     }
     catch (error) {
