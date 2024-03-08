@@ -5,7 +5,6 @@
         "title": "My-Brand-Pudens",
         "description": "APIs for my brand portfolio website"
     },
-    
     "schemes": [
         "http", "https"
     ],
