@@ -6,6 +6,8 @@
         "description":"APIs for my brand portfolio website"
         
     },
+
+    "basePath": "/",
     "schemes": [
         "http","https"
     ],
