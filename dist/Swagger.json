@@ -1,0 +1,786 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "My-Brand-Pudens",
+        "description": "APIs for my brand portfolio website"
+    },
+    "host": "localhost:5000",
+    "basePath": "/",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/auth/signup": {
+            "post": {
+                "tags": ["Authentication"],
+                "summary": "Add a new user",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "new user info",
+                        "schema": {
+                            "$ref": "#/definitions/user"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User Created"
+                    },
+                    "201": {
+                        "description": "user created"
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": ["Authentication"],
+                "summary": "Login",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "login user",
+                        "schema": {
+                            "$ref": "#/definitions/loginUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Logged in",
+                        "headers": {
+                            "Set-Cookie": {
+                                "description": "Genereted a cookie",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "bad request"
+                    },
+                    "401": {
+                        "description": "no existing user"
+                    },
+                    "403": {
+                        "description": "wrong credentials"
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": ["Authentication"],
+                "summary": "Logout ",
+                "description": "Logout",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Logged Out"
+                    },
+                    "400": {
+                        "description": "bad request"
+                    },
+                    "403": {
+                        "description": "not logged in"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "Get all users",
+                "responses": {
+                    "200": {
+                        "description": "Users Fetched",
+                        "schema": {
+                            "$ref": "users"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "403": { "description": "not logged in" }
+                }
+            }
+        },
+        "/users/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of user",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "delete": {
+                "summary": "delete user by ID",
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User Deleted",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Innexistent user"
+                    },
+                    "403": {
+                        "description": "not logged in"
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Update user info",
+                "tags": ["Users"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "User updates",
+                        "schema": {
+                            "$ref": "#/definitions/userPatch"
+                        }
+                    }
+                ],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "User Updated",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    },
+                    "400": {
+                        "description": "bad request"
+                    },
+                    "403": {
+                        "description": "Not logged in"
+                    },
+                    "404": {
+                        "description": "Innexistent user"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/users/{id}/status": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "description": "Id of user",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "patch": {
+                "summary": "Change user status",
+                "tags": ["Users"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "user status",
+                        "schema": {
+                            "$ref": "#/definitions/userStatusPatch"
+                        }
+                    }
+                ],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "User status updated"
+                    },
+                    "400": {
+                        "description": "bad request"
+                    },
+                    "404": {
+                        "description": "USer not found"
+                    }
+                }
+            }
+        },
+        "/blogs": {
+            "get": {
+                "tags": [
+                    "Blogs"
+                ],
+                "summary": "Get all blogs",
+                "responses": {
+                    "200": {
+                        "description": "Blogs Fetched",
+                        "schema": {
+                            "$ref": "blogs"
+                        }
+                    },
+                    "400": {
+                        "description": "Failed. Bad request"
+                    },
+                    "403": {
+                        "description": "not logged in"
+                    }
+                }
+            }
+        },
+        "/blogs/new": {
+            "post": {
+                "tags": ["Blogs"],
+                "summary": "Post a new blog",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "title",
+                        "type": "string",
+                        "required": true,
+                        "description": "Blog title"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "body",
+                        "type": "string",
+                        "required": true,
+                        "description": "Blog body"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "image",
+                        "description": "Blog Image",
+                        "type": "file",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Blog Created",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "failed. bad request"
+                    }
+                }
+            }
+        },
+        "/blogs/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of the blog",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Blogs"
+                ],
+                "summary": "Get blog by ID",
+                "responses": {
+                    "200": {
+                        "description": "Blog Fetched",
+                        "schema": {
+                            "$ref": "#/definitions/blog"
+                        }
+                    },
+                    "404": {
+                        "description": "failed. Innexistent blog"
+                    },
+                    "400": {
+                        "description": "failed. bad request"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a blog by id",
+                "tags": ["Blogs"],
+                "responses": {
+                    "200": {
+                        "description": "Blog Deleted",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Innexistent blog"
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Update blog by id",
+                "tags": ["Blogs"],
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "title",
+                        "type": "string",
+                        "description": "Blog title",
+                        "required": false
+                    },
+                    {
+                        "in": "formData",
+                        "name": "body",
+                        "type": "string",
+                        "description": "Blog body",
+                        "required": false
+                    },
+                    {
+                        "in": "formData",
+                        "name": "image",
+                        "description": "Blog Image",
+                        "type": "file",
+                        "required": false
+                    }
+                ],
+                "consumes": ["multipart/form-data"],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "failed. bad request"
+                    }
+                }
+            }
+        },
+        "/blogs/{id}/like": {
+            "post": {
+                "tags": ["Blogs"],
+                "summary": "Like a blog",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "blog id",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Like Updated"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Innexistent blog"
+                    }
+                }
+            }
+        },
+        "/blogs/{id}/comments": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "id of blog",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "summary": "Get all comments",
+                "description": "Fetch all comments in DB",
+                "tags": ["Comments"],
+                "responses": {
+                    "200": {
+                        "description": "Comments Fetched",
+                        "schema": {
+                            "$ref": "#/definitions/comments"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Innexistent blog"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Comments"],
+                "summary": "Send new comment",
+                "description": "Adding a comment",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "comment body",
+                        "schema": {
+                            "$ref": "#/definitions/comment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "201": {
+                        "description": "Comment created",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "bad request"
+                    },
+                    "404": {
+                        "description": "Innexistent blog"
+                    }
+                }
+            }
+        },
+        "/blogs/{id}/comments/{cId}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "id of the blog",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "cId",
+                    "in": "path",
+                    "description": "id of the comment",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "delete": {
+                "summary": "delete comment by ID",
+                "tags": ["Comments"],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "201": {
+                        "description": "Deleted"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "403": {
+                        "description": "Not logged in"
+                    },
+                    "404": {
+                        "description": "blog not found"
+                    }
+                }
+            }
+        },
+        "/messages": {
+            "get": {
+                "tags": [
+                    "Messages"
+                ],
+                "summary": "Get all messages",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "messages"
+                        }
+                    },
+                    "400": {
+                        "description": "failed.bad request"
+                    },
+                    "403": {
+                        "description": "not logged in"
+                    }
+                }
+            }
+        },
+        "/messages/send": {
+            "post": {
+                "tags": [
+                    "Messages"
+                ],
+                "summary": "Send a new message",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The sent message",
+                        "schema": {
+                            "$ref": "#/definitions/message"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    },
+                    "400": {
+                        "description": "failed.bad request"
+                    }
+                }
+            }
+        },
+        "/messages/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of the message",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Messages"
+                ],
+                "summary": "Get message by ID",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/message"
+                        }
+                    },
+                    "404": {
+                        "description": "Failed. Innexistent message"
+                    },
+                    "400": {
+                        "description": "Failed. Bad request"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "delete a message by id",
+                "tags": [
+                    "Messages"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    },
+                    "404": {
+                        "description": "failed. Innexistent message"
+                    },
+                    "400": {
+                        "description": "failed. Bad request"
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "KYZIE_AUTH": {
+            "type": "apiKey",
+            "in": "header",
+            "name": "Login Cookie"
+        }
+    },
+    "definitions": {
+        "message": {
+            "type": "object",
+            "properties": {
+                "senderName": {
+                    "type": "string"
+                },
+                "senderEmail": {
+                    "type": "string"
+                },
+                "messageBody": {
+                    "type": "string"
+                }
+            }
+        },
+        "Messages": {
+            "type": "array",
+            "properties": {
+                "messages": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/message"
+                    }
+                }
+            }
+        },
+        "id": {
+            "type": "string"
+        },
+        "blog": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "required": ["true"]
+                },
+                "body": {
+                    "type": "string",
+                    "required": ["true"]
+                },
+                "image": {
+                    "type": "object",
+                    "required": ["true"]
+                },
+                "likes": {
+                    "type": "array",
+                    "default": []
+                }
+            }
+        },
+        "blogPatch": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "body": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "object"
+                }
+            }
+        },
+        "blogs": {
+            "type": "array",
+            "properties": {
+                "blogs": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/blog"
+                    }
+                }
+            }
+        },
+        "user": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "required": ["true"]
+                },
+                "email": {
+                    "type": "string",
+                    "required": ["true"]
+                },
+                "password": {
+                    "type": "string",
+                    "required": ["true"]
+                },
+                "confirmPassword": {
+                    "type": "string"
+                }
+            }
+        },
+        "userPatch": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "userStatusPatch": {
+            "type": "object",
+            "properties": {
+                "isAdmin": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "loginUser": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "required": ["true"]
+                },
+                "password": {
+                    "type": "string",
+                    "required": ["true"]
+                }
+            }
+        },
+        "users": {
+            "type": "array",
+            "properties": {
+                "blogs": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/user"
+                    }
+                }
+            }
+        },
+        "comment": {
+            "type": "object",
+            "properties": {
+                "commentBody": {
+                    "type": "string",
+                    "required": ["true"]
+                }
+            }
+        },
+        "comments": {
+            "type": "array",
+            "properties": {
+                "comments": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/comment"
+                    }
+                }
+            }
+        }
+    }
+}
