@@ -21,7 +21,7 @@ const newBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const cloudinaryRes = yield cloudinary_1.cloudinary.uploader.upload(imageFile, { folder: 'blog_images' });
         const imgUrl = cloudinaryRes.secure_url;
         if (!title || !body || !imgUrl) {
-            return res.status(400).json({ success: false, message: "Empty fields" });
+            return res.status(402).json({ success: false, message: "Empty fields" });
         }
         const blog = yield (0, blogs_1.createBlog)({
             title,
@@ -65,8 +65,8 @@ const deleteBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         yield cloudinary_1.cloudinary.uploader.destroy(existingImage.public_id);
         return res.status(201).json({ success: true, message: "Blog deleted" });
     }
-    catch (error) {
-        return res.status(400).json({ success: false, error: error });
+    catch (Error) {
+        return res.status(400).json({ success: false, error: Error });
     }
 });
 exports.deleteBlog = deleteBlog;
@@ -107,12 +107,12 @@ const readBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const { id } = req.params;
         let wantedBlog = yield (0, blogs_1.getBlogById)(id);
         if (!wantedBlog) {
-            return res.status(400).json({ sucess: false, message: "Inexistent blog" });
+            return res.status(404).json({ success: false, message: "Inexistent blog" });
         }
-        return res.status(200).json({ sucess: true, data: wantedBlog });
+        return res.status(200).json({ success: true, data: wantedBlog });
     }
     catch (error) {
-        return res.status(400).json({ sucess: false, message: "bad request" });
+        return res.status(400).json({ success: false, message: "bad request" });
     }
 });
 exports.readBlog = readBlog;

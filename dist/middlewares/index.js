@@ -53,6 +53,8 @@ exports.isAuthenticated = isAuthenticated;
 const isAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const status = String((0, lodash_1.get)(req, 'identity.isAdmin'));
+        if (!status)
+            res.status(403).json({ success: false, message: "Not logged in" });
         if (status === "false" || !status) {
             return res.status(403).json({ success: false, message: "You are not an admin" });
         }
