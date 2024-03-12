@@ -37,7 +37,6 @@ export const login = async (req:express.Request,res:express.Response)=>{
         },process.env.ACCESS_TOKEN_SECRET!
         );
 
-        console.log(accessToken);
 
 
         const salt:string = random();
@@ -47,7 +46,7 @@ export const login = async (req:express.Request,res:express.Response)=>{
 
         res.cookie('KYZIE-AUTH', user.authentication?.sessionToken, {path:'/'});
         console.log(user.authentication?.sessionToken);
-        return res.status(200).json({success:true,accessToken,message:`${user.username} logged in`}).end();
+        return res.status(200).json({success:true,accessToken,message:`${user.username} logged in`,token:accessToken}).end();
     }catch(error){
         console.log(error);
         return res.status(400);
