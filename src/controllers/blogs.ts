@@ -17,7 +17,7 @@ export const newBlog = async(req:express.Request,res:express.Response)=>{
         const imgUrl = cloudinaryRes.secure_url;
 
         if(!title||!body||!imgUrl){
-            return res.status(400).json({success:false,message:"Empty fields"});
+            return res.status(402).json({success:false,message:"Empty fields"});
         }
         
         const blog = await createBlog({
@@ -64,8 +64,8 @@ export const deleteBlog = async(req:express.Request,res:express.Response)=>{
         await cloudinary.uploader.destroy(existingImage.public_id);
 
         return res.status(201).json({success:true,message:"Blog deleted"});
-    }catch(error){
-        return res.status(400).json({success:false,error:error});
+    }catch(Error){
+        return res.status(400).json({success:false,error:Error});
     }
 }
 
@@ -117,11 +117,11 @@ export const readBlog = async (req:express.Request,res:express.Response)=>{
     let wantedBlog = await getBlogById(id);
     
         if(!wantedBlog){
-        return res.status(400).json({sucess:false,message:"Inexistent blog"});
+        return res.status(404).json({success:false,message:"Inexistent blog"});
         }
-        return res.status(200).json({sucess:true,data:wantedBlog});
+        return res.status(200).json({success:true,data:wantedBlog});
     }catch(error){
-        return res.status(400).json({sucess:false,message:"bad request"});
+        return res.status(400).json({success:false,message:"bad request"});
     }
 }
 
