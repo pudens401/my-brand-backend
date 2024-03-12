@@ -9,8 +9,8 @@
     "ts-config-init": "echo 'Initializing ts-jest config...' && copy node_modules\\ts-jest\\presets\\default\\jest-preset.js jest.config.js",
     "test": "jest",
     "test:watch": "jest --watchAll --detectOpenHandles",
-    "build": "npm install && npm run tsc",
-    "tsc": "tsc"
+    "builder": "npm install && npm run build",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
