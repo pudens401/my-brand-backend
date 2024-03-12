@@ -1,8 +1,8 @@
 import express from "express";
 import { createUser, getUserByEmail } from "../db/users";
 import { authentication, random } from "../helpers";
-import { any } from "joi";
-import messages from "routers/messages";
+import jwt from 'jsonwebtoken';
+
 
 
 export const login = async (req:express.Request,res:express.Response)=>{
@@ -19,20 +19,35 @@ export const login = async (req:express.Request,res:express.Response)=>{
             return res.status(404).json({success:false,message:"unregistered email"});
         }
 
-        const expectedHash = authentication(user.authentication!.salt!,password);
+        const expectedHash:string = authentication(user.authentication!.salt!,password);
 
         if(user.authentication!.password!==expectedHash){
             return res.status(403).json({success:false,message:"incorrect password"});
         }
 
-        const salt = random();
+
+        const accessToken:string = jwt.sign({
+            user:{
+                username:user.username,
+                email:user.email,
+                id:user.id,
+                isAdmin:user.isAdmin
+            }
+
+        },process.env.ACCESS_TOKEN_SECRET!
+        );
+
+        console.log(accessToken);
+
+
+        const salt:string = random();
         user.authentication!.sessionToken = authentication(salt,user._id.toString());
 
         await user.save();
 
         res.cookie('KYZIE-AUTH', user.authentication?.sessionToken, {path:'/'});
-
-        return res.status(200).json({success:true,message:`${user.username} logged in`}).end();
+        console.log(user.authentication?.sessionToken);
+        return res.status(200).json({success:true,accessToken,message:`${user.username} logged in`}).end();
     }catch(error){
         console.log(error);
         return res.status(400);
@@ -60,7 +75,7 @@ export const register = async(req:express.Request,res:express.Response)=>{
             username,
             authentication:{
                 salt,
-                password:authentication(salt,password),
+                password:authentication(salt,password),  //hashing password
             },
             isAdmin
         });

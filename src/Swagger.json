@@ -47,7 +47,9 @@
                     }
                 }
             }
+            
         },
+
         "/auth/login":{
             "post": {
                 "tags": ["Authentication"],
@@ -87,7 +89,13 @@
             }
         },
         "/auth/logout":{
+            
             "post": {
+                "security": [
+                    {
+                        "JWT":[]
+                    }
+                ],
                 "tags": ["Authentication"],
                 "summary": "Logout ",
                 "description": "Logout",
@@ -108,6 +116,11 @@
         },
         "/users":{
             "get": {
+                "security": [
+                    {
+                        "JWT":[]
+                    }
+                ],
                 "tags": ["Users"],
                 "summary": "Get all users",
                 "responses": {
@@ -135,6 +148,11 @@
                 }
             ],
             "delete":{
+                "security": [
+                    {
+                        "JWT":[]
+                    }
+                ],
                 "summary": "delete user by ID",
                 "tags": [
                     "Users"
@@ -158,6 +176,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "JWT":[]
+                    }
+                ],
                 "summary": "Update user info",
                 "tags": ["Users"],
                 "parameters": [
@@ -195,6 +218,7 @@
             }
         },
         "/users/{id}/status":{
+            
             "parameters": [
                 {
                     "in": "path",
@@ -206,6 +230,11 @@
                 }
             ],
             "patch": {
+                "security": [
+                    {
+                        "JWT":[]
+                    }
+                ],
                 "summary": "Change user status",
                 "tags": ["Users"],
                 "parameters": [
@@ -235,6 +264,7 @@
         },
         "/blogs":{
             "get": {
+                
                 "tags": [
                     "Blogs"
                 ],
@@ -256,7 +286,13 @@
             }
         },
         "/blogs/new":{
+            
             "post": {
+                "security": [
+                    {
+                        "JWT":[]
+                    }
+                ],
                 "tags": ["Blogs"],
                 "summary": "Post a new blog",
                 "consumes":[
@@ -316,6 +352,7 @@
                 }
             ],
             "get": {
+                
                 "tags": [
                     "Blogs"
                 ],
@@ -336,6 +373,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "JWT":[]
+                    }
+                ],
                 "summary": "Delete a blog by id",
                 "tags": ["Blogs"],
                 "responses": {
@@ -354,6 +396,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "JWT":[]
+                    }
+                ],
                 "summary": "Update blog by id",
                 "tags": ["Blogs"],
                 "parameters": [
@@ -394,6 +441,11 @@
         },
         "/blogs/{id}/like":{
             "post": {
+                "security": [
+                    {
+                        "JWT":[]
+                    }
+                ],
                 "tags": ["Blogs"],
                 "summary": "Like a blog",
                 "parameters": [
@@ -431,6 +483,7 @@
                 }
             ],
             "get":{
+                
                 "summary": "Get all comments",
                 "description": "Fetch all comments in DB",
                 "tags": ["Comments"],
@@ -450,6 +503,11 @@
                 }
             },
             "post":{
+                "security": [
+                    {
+                        "JWT":[]
+                    }
+                ],
                 "tags": ["Comments"],
                 "summary": "Send new comment",
                 "description": "Adding a comment",
@@ -500,6 +558,11 @@
                 }
             ],
             "delete": {
+                "security": [
+                    {
+                        "JWT":[]
+                    }
+                ],
                 "summary": "delete comment by ID",
                 "tags": ["Comments"],
                 "responses": {
@@ -523,6 +586,11 @@
         },
         "/messages":{
             "get":{
+                "security": [
+                    {
+                        "JWT":[]
+                    }
+                ],
                 "tags": [
                     "Messages"
                 ],
@@ -545,6 +613,7 @@
         },
         "/messages/send":{
             "post": {
+                
                 "tags": [
                     "Messages"
                 ],
@@ -586,6 +655,11 @@
                 }
             ],
             "get": {
+                "security": [
+                    {
+                        "JWT":[]
+                    }
+                ],
                 "tags": [
                     "Messages"
                 ],
@@ -606,6 +680,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "JWT":[]
+                    }
+                ],
                 "summary": "delete a message by id",
                 "tags": [
                     "Messages"
@@ -633,6 +712,12 @@
             "type": "apiKey",
             "in": "header",
             "name": "Login Cookie"
+        },
+        "JWT":{
+            "type": "apiKey",
+            "name": "authorization",
+            "in": "header",
+            "description": "Enter JWT token as Bearer <token>"
         }
     },
     "definitions": {
