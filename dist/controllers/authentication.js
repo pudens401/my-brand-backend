@@ -45,7 +45,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield user.save();
         res.cookie('KYZIE-AUTH', (_a = user.authentication) === null || _a === void 0 ? void 0 : _a.sessionToken, { path: '/' });
         console.log((_b = user.authentication) === null || _b === void 0 ? void 0 : _b.sessionToken);
-        return res.status(200).json({ success: true, accessToken, message: `${user.username} logged in` }).end();
+        return res.status(200).json({ success: true, accessToken, message: `${user.username} logged in`, userInfo: user }).end();
     }
     catch (error) {
         console.log(error);
