@@ -16,6 +16,7 @@ exports.logout = exports.register = exports.login = void 0;
 const users_1 = require("../db/users");
 const helpers_1 = require("../helpers");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+require("dotenv").config();
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {
@@ -29,7 +30,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const expectedHash = (0, helpers_1.authentication)(user.authentication.salt, password);
         if (user.authentication.password !== expectedHash) {
-            return res.status(403).json({ success: false, message: "incorrect password" });
+            return res.status(400).json({ success: false, message: "incorrect password" });
         }
         const accessToken = jsonwebtoken_1.default.sign({
             user: {
@@ -44,11 +45,11 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield user.save();
         res.cookie('KYZIE-AUTH', (_a = user.authentication) === null || _a === void 0 ? void 0 : _a.sessionToken, { path: '/' });
         console.log((_b = user.authentication) === null || _b === void 0 ? void 0 : _b.sessionToken);
-        return res.status(200).json({ success: true, accessToken, message: `${user.username} logged in`, token: accessToken }).end();
+        return res.status(200).json({ success: true, accessToken, message: `${user.username} logged in` }).end();
     }
     catch (error) {
         console.log(error);
-        return res.status(400);
+        return res.status(409);
     }
 });
 exports.login = login;
@@ -75,8 +76,8 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(201).json({ success: true, message: `${user.username} created` }).end();
     }
     catch (error) {
-        console.log(error);
-        return res.status(400).json({ success: false, message: "bad request" });
+        //console.log(error);
+        return res.status(409).json({ success: false, message: "bad request" });
     }
 });
 exports.register = register;
@@ -89,7 +90,7 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(200).json({ success: true, message: "logged out successfully" });
     }
     catch (error) {
-        return res.status(400).json({ success: false, error: error });
+        return res.status(409).json({ success: false, error: error });
     }
 });
 exports.logout = logout;

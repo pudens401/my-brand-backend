@@ -18,7 +18,7 @@ const isOwner = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         const currentUserId = String((0, lodash_1.get)(req, 'identity._id'));
         console.log(currentUserId);
         if (!currentUserId) {
-            return res.status(403).json({ success: false, message: "Forbidden" });
+            return res.status(401).json({ success: false, message: "Forbidden" });
         }
         if (currentUserId !== id) {
             return res.status(403).json({ success: false, message: "Can't modify or delete other user" });
@@ -26,7 +26,7 @@ const isOwner = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         next();
     }
     catch (error) {
-        console.log(error);
+        // console.log(error);
         return res.status(400).json({ success: false, message: error });
     }
 });
@@ -54,7 +54,7 @@ const isAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const status = String((0, lodash_1.get)(req, 'identity.isAdmin'));
         if (!status)
-            res.status(403).json({ success: false, message: "Not logged in" });
+            res.status(401).json({ success: false, message: "Not logged in" });
         if (status === "false" || !status) {
             return res.status(403).json({ success: false, message: "You are not an admin" });
         }

@@ -18,7 +18,7 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     catch (error) {
         console.log(error);
-        return res.sendStatus(400);
+        return res.sendStatus(409);
     }
 });
 exports.getAllUsers = getAllUsers;
@@ -29,7 +29,7 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         return res.status(201).json({ success: true, message: "user deleted successfully" });
     }
     catch (error) {
-        return res.status(400).json({ success: false, message: error });
+        return res.status(409).json({ success: false, message: error });
     }
 });
 exports.deleteUser = deleteUser;
@@ -46,11 +46,11 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
         user.username = username;
         yield user.save();
-        return res.status(200).json({ success: true, message: "user updated successfully" }).end();
+        return res.status(204).json({ success: true, message: "user updated successfully" });
     }
     catch (error) {
         console.log(error);
-        return res.status(400).json({ success: false, message: error });
+        return res.status(409).json({ success: false, message: error });
     }
 });
 exports.updateUser = updateUser;
@@ -67,11 +67,11 @@ const updateUserStatus = (req, res) => __awaiter(void 0, void 0, void 0, functio
         }
         user.isAdmin = isAdmin;
         yield user.save();
-        return res.status(200).json({ success: true, message: "user status updated successfully" }).end();
+        res.status(204).json({ success: true, message: "user status updated successfully" });
     }
     catch (error) {
         console.log(error);
-        return res.status(400).json({ success: false, message: error });
+        return res.status(409).json({ success: false, message: error });
     }
 });
 exports.updateUserStatus = updateUserStatus;

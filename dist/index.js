@@ -16,14 +16,6 @@ exports.connectDB = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const server_1 = require("./utils/server");
 require("dotenv").config();
-// export const app = express();
-// app.use(cors({
-//     credentials:true,
-// }));
-// app.use(compression());
-// app.use(cookieParser());
-// app.use(bodyParser.json());
-// app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerDocument));
 const app = (0, server_1.createServer)();
 const PORT = process.env.DEV_PORT ? Number(process.env.DEV_PORT) : 5000;
 mongoose_1.default.Promise = Promise;
@@ -37,11 +29,8 @@ const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.connectDB = connectDB;
-// mongoose.connect('mongodb://localhost:27017/mybrand');
-//  connectDB();
 app.listen(PORT, () => {
     console.log(`Server started at ${PORT}`);
     (0, exports.connectDB)();
 });
-// app.use('/',routers());
 //# sourceMappingURL=index.js.map

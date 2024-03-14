@@ -63,7 +63,7 @@ const sendMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             messageBody,
             read,
         });
-        return res.status(200).json({ success: true, message: "Message sent succesfully" });
+        return res.status(201).json({ success: true, message: "Message sent succesfully" });
     }
     catch (error) {
         return res.status(400).json({ success: false, message: error });

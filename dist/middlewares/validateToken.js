@@ -15,11 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const lodash_1 = require("lodash");
+require("dotenv").config();
 const validateToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let token;
-    console.log(req.headers);
+    // console.log(req.headers);
     if (!req.headers.authorization) {
-        return res.status(401).json("no authentication");
+        return res.status(401).json({ success: false, message: "Not authenticated" });
     }
     let authHeader = req.headers.authorization ? req.headers.authorization : req.headers.Authorization;
     if (authHeader && authHeader.indexOf("Bearer") === 0) {
@@ -29,15 +30,16 @@ const validateToken = (req, res, next) => __awaiter(void 0, void 0, void 0, func
         }
         jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
             if (err) {
-                return res.status(401).json({ success: false, message: err });
+                return res.status(400).json({ success: false, message: err });
             }
+            // console.log(decoded);
             const currentUser = decoded;
-            console.log(currentUser.user);
-            (0, lodash_1.merge)(req, { identity: currentUser.user });
+            console.log(currentUser);
+            (0, lodash_1.merge)(req, { identity: currentUser });
         });
     }
     else {
-        return res.status(401).json({ success: false, message: authHeader });
+        return res.status(401).json({ success: false, message: "token not following rules" });
     }
     next();
 });
