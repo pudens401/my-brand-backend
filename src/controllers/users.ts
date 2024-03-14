@@ -13,7 +13,7 @@ export const getAllUsers = async(req:express.Request,res:express.Response)=>{
         return res.status(200).json(users);
     }catch(error){
         console.log(error);
-        return res.sendStatus(400);
+        return res.sendStatus(409);
     }
 }
 
@@ -25,7 +25,7 @@ export const deleteUser =  async(req:express.Request,res:express.Response)=>{
 
         return res.status(201).json({success:true,message:"user deleted successfully"});
     }catch(error){
-        return res.status(400).json({success:false,message:error});
+        return res.status(409).json({success:false,message:error});
     }
 }
 
@@ -45,11 +45,11 @@ export const updateUser = async(req:express.Request,res:express.Response)=>{
         user.username = username;
         await user.save();
 
-        return res.status(200).json({success:true,message:"user updated successfully"}).end();
+        return res.status(204).json({success:true,message:"user updated successfully"});
         
     }catch(error){
        console.log(error);
-       return res.status(400).json({success:false,message:error});
+       return res.status(409).json({success:false,message:error});
     }
 }
 
@@ -70,10 +70,10 @@ export const updateUserStatus = async(req:express.Request,res:express.Response)=
         user.isAdmin = isAdmin;
         await user.save();
 
-        return res.status(200).json({success:true,message:"user status updated successfully"}).end();
+        res.status(204).json({success:true,message:"user status updated successfully"});
         
     }catch(error){
        console.log(error);
-       return res.status(400).json({success:false,message:error});
+       return res.status(409).json({success:false,message:error});
     }
 }

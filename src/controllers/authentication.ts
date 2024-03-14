@@ -2,7 +2,7 @@ import express from "express";
 import { createUser, getUserByEmail } from "../db/users";
 import { authentication, random } from "../helpers";
 import jwt from 'jsonwebtoken';
-
+require("dotenv").config();
 
 
 export const login = async (req:express.Request,res:express.Response)=>{
@@ -22,7 +22,7 @@ export const login = async (req:express.Request,res:express.Response)=>{
         const expectedHash:string = authentication(user.authentication!.salt!,password);
 
         if(user.authentication!.password!==expectedHash){
-            return res.status(403).json({success:false,message:"incorrect password"});
+            return res.status(400).json({success:false,message:"incorrect password"});
         }
 
 
@@ -46,10 +46,10 @@ export const login = async (req:express.Request,res:express.Response)=>{
 
         res.cookie('KYZIE-AUTH', user.authentication?.sessionToken, {path:'/'});
         console.log(user.authentication?.sessionToken);
-        return res.status(200).json({success:true,accessToken,message:`${user.username} logged in`,token:accessToken}).end();
+        return res.status(200).json({success:true,accessToken,message:`${user.username} logged in`}).end();
     }catch(error){
         console.log(error);
-        return res.status(400);
+        return res.status(409);
     }
 }
 
@@ -81,8 +81,8 @@ export const register = async(req:express.Request,res:express.Response)=>{
 
         return res.status(201).json({success:true,message:`${user.username} created`}).end(); 
     }catch(error){
-       console.log(error);
-       return res.status(400).json({success:false,message:"bad request"}); 
+       //console.log(error);
+       return res.status(409).json({success:false,message:"bad request"}); 
     }
 }
 
@@ -93,6 +93,6 @@ export const logout = async(req:express.Request,res:express.Response)=>{
         res.clearCookie("KYZIE-AUTH");
         res.status(200).json({success:true,message:"logged out successfully"});
     }catch(error){
-        return res.status(400).json({success:false,error:error});
+        return res.status(409).json({success:false,error:error});
     }
 }

@@ -3,14 +3,15 @@ import  jwt, { JwtPayload, decode }  from 'jsonwebtoken';
 import express from 'express'
 import { string } from 'joi';
 import { merge } from 'lodash';
+require("dotenv").config();
 
 
 export const validateToken = async (req:express.Request,res:express.Response,next:express.NextFunction)=>{
 
     let token;
-    console.log(req.headers);
+    // console.log(req.headers);
     if(!req.headers.authorization){
-        return res.status(401).json("no authentication");
+        return res.status(401).json({success:false,message:"Not authenticated"});
     }
     let authHeader = req.headers.authorization?req.headers.authorization:req.headers.Authorization as any;
 
@@ -23,18 +24,19 @@ export const validateToken = async (req:express.Request,res:express.Response,nex
         
         jwt.verify(token,process.env.ACCESS_TOKEN_SECRET!,(err:any,decoded:any)=>{
             if(err){
-                return res.status(401).json({success:false,message:err});
+                return res.status(400).json({success:false,message:err});
             }
-            const currentUser = decoded as JwtPayload;
-            console.log(currentUser.user);
-            merge(req,{identity:currentUser.user});
+            // console.log(decoded);
+            const currentUser = decoded;
+            console.log(currentUser);
+            merge(req,{identity:currentUser});
             
             
              
         });
        
     }else{
-        return res.status(401).json({success:false,message:authHeader})
+        return res.status(401).json({success:false,message:"token not following rules"})
     }
     
     next(); 
